@@ -11,6 +11,7 @@
 cd backend
 npm install
 npm run start
+Go to http://localhost:3000/
 ```
 
 ## Install Dependencies
