@@ -13,7 +13,7 @@ npm install
 npm run start
 ```
 
-## Install De
+## Install Dependencies
 
 ```
 install -D typescript ts-node nodemon
