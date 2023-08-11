@@ -1,5 +1,20 @@
 # TodoList-FullStack
 
+## Services
+
+- Get all todos
+- Search todo by status (complete, notcomplete)
+
+## Step to run
+
+```
+cd backend
+npm install
+npm run start
+```
+
+## Install De
+
 ```
 install -D typescript ts-node nodemon
 
