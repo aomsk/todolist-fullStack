@@ -1,4 +1,4 @@
-# todolist-fullStack
+# TodoList-FullStack
 TodoList FullStack (React, Express, MongoDB)
 
 ## Build With
