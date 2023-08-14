@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getTodos } from "../model/todos";
+import { getTodos, createTodo } from "../model/todos";
 
 export const getAllTodos = async (req: Request, res: Response) => {
   try {
@@ -14,7 +14,6 @@ export const searchTodosByStatus = async (req: Request, res: Response) => {
   try {
     const { status } = req.params;
     const todos = await getTodos();
-
     if (status === "complete") {
       const todoComplete = todos.filter((todo) => todo.complete === true);
       return res
@@ -31,6 +30,23 @@ export const searchTodosByStatus = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Not found status" });
     }
   } catch (error) {
+    return res.sendStatus(400);
+  }
+};
+
+export const createNewTodo = async (req: Request, res: Response) => {
+  try {
+    const { title, complete } = req.body;
+    if (!title || complete === "") {
+      return res.status(404).json({ message: "Please enter title field" });
+    }
+    const todo = await createTodo({
+      title,
+      complete,
+    });
+    return res.status(200).json({ message: "Create new Todo Successfuly", todo }).end();
+  } catch (error) {
+    console.log(error);
     return res.sendStatus(400);
   }
 };
