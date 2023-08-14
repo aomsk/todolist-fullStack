@@ -4,6 +4,7 @@
 
 - Get all todos
 - Search todo by status (complete, notcomplete)
+- Create new todo to DB
 
 ## Step to run
 
