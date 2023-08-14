@@ -6,6 +6,5 @@ const router = Router();
 // Export router
 export default (): Router => {
   todos(router);
-
   return router;
 };

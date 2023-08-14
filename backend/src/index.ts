@@ -5,11 +5,14 @@ import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
 import router from "./router"; // router
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 const app = express();
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
+app.use(express.json()); // use middleware swagger
 
 // Connect MongoDB
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -28,7 +31,88 @@ app.get("/help", (req: Request, res: Response) => {
 });
 
 // Use Router
+/**
+ *  @swagger
+ *  /api/todos:
+ *    get:
+ *      summary: Get All Todos
+ *      description: Get All Todos
+ */
+/**
+ *  @swagger
+ *  /api/todos/search/:status:
+ *    get:
+ *      summary: Get Todos by status
+ *      description: Search Todos by status
+ *      parameters:
+ *        - in: path
+ *          name: status
+ *          required: true
+ *          description: Status is type String
+ *          schema:
+ *            type: string
+ */
+/**
+ * @swagger
+ * /api/todos:
+ *    post:
+ *      summary: Creat a new Todo
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                title:
+ *                  type: string
+ *                complete:
+ *                  type: boolean
+ */
+/**
+ *  @swagger
+ *  /api/todos/:id:
+ *    delete:
+ *      summary: Delete Todos by id
+ *      description: Delete Todos by id
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          description: ID is type integer
+ *          schema:
+ *            type: integer
+ */
+/**
+ *  @swagger
+ *  /api/todos/:id:
+ *    patch:
+ *      summary: Update Todos by id
+ *      description: Update Todos by id
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          description: ID is type integer
+ *          schema:
+ *            type: integer
+ */
 app.use("/", router());
+
+// Swaager
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Documentation",
+      version: "1.0.0",
+      description: "TodoList API Documentation",
+    },
+    servers: [{ url: "http://localhost:3000/", description: "Development server" }],
+  },
+  apis: ["./src/*.ts"],
+};
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Start server
 const PORT = process.env.PORT || 5000;
