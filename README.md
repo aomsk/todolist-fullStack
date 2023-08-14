@@ -1,5 +1,5 @@
 # TodoList-FullStack
-TodoList FullStack (React, Express, MongoDB)
+TodoList FullStack (MERN Stack => MongoDB, Express, React, Nodejs)
 
 ## Build With
 ### Front-end
