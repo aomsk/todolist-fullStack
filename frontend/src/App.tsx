@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, FormEvent } from "react";
 import TodoComponent from "./components/TodoComponent";
 import ButtonsComponent from "./components/ButtonsComponent";
-import "./App.css";
 
 export interface Todo {
   id: number;
