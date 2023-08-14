@@ -7,12 +7,13 @@ import mongoose from "mongoose";
 import router from "./router"; // router
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import { loggerMiddleware } from "./middlewares"; // middleware
 
 const app = express();
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
-app.use(express.json()); // use middleware swagger
+app.use(express.json()); // use swagger
 
 // Connect MongoDB
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -96,7 +97,7 @@ app.get("/help", (req: Request, res: Response) => {
  *          schema:
  *            type: integer
  */
-app.use("/", router());
+app.use("/", loggerMiddleware, router());
 
 // Swaager
 const swaggerOptions = {
