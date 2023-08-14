@@ -5,6 +5,7 @@
 - Get all todos
 - Search todo by status (complete, notcomplete)
 - Create new todo to DB
+- Delete todo by ID
 
 ## Step to run
 
