@@ -3,11 +3,12 @@ TodoList FullStack (React, Express, MongoDB)
 
 ## Build With
 ### Front-end
-* React
-* TypeScript
-* Tailwind CSS
+- React (Vite)
+- Tailwind CSS
+- FontAwesome (Icon)
+- TypeScript
   
 ### Back-end
 * Express
-* TypeScript
 * MongoDB
+* TypeScript
