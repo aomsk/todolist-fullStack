@@ -4,12 +4,18 @@ import compression from "compression";
 import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
-import router from "./router"; // router
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import { loggerMiddleware } from "./middlewares"; // middleware
+
+// Middleware
+import { loggerMiddleware } from "./middlewares";
+
+// Router
+import todosRouter from "./routes/todos";
 
 const app = express();
+
+// use middlware
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
@@ -97,7 +103,7 @@ app.get("/help", (req: Request, res: Response) => {
  *          schema:
  *            type: integer
  */
-app.use("/", loggerMiddleware, router());
+app.use("/", loggerMiddleware, todosRouter);
 
 // Swaager
 const swaggerOptions = {
