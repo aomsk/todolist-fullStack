@@ -18,6 +18,6 @@ export const createTodo = (values: Record<string, any>) => {
     .catch((error) => console.log(error));
   return newTodo;
 };
-export const deleteTodo = (id: string) => TodoModel.findByIdAndDelete({ _id: id });
-export const updateTodo = (id: string, values: Record<string, any>) =>
+export const deleteTodoByID = (id: string) => TodoModel.findByIdAndDelete({ _id: id });
+export const updateTodoByID = (id: string, values: Record<string, any>) =>
   TodoModel.findByIdAndUpdate(id, values);
