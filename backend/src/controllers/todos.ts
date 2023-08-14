@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getTodos, createTodo, deleteTodoByID } from "../model/todos";
+import { getTodos, createTodo, deleteTodo, updateTodo, getTodoByID } from "../model/todos";
 
 export const getAllTodos = async (req: Request, res: Response) => {
   try {
@@ -36,15 +36,15 @@ export const searchTodosByStatus = async (req: Request, res: Response) => {
 
 export const createNewTodo = async (req: Request, res: Response) => {
   try {
-    const { title, complete } = req.body;
-    if (!title || complete === "") {
+    const { title } = req.body;
+    if (!title) {
       return res.status(400).json({ message: "Please enter title field" });
     }
     const todo = await createTodo({
       title,
-      complete,
+      complete: false,
     });
-    return res.status(200).json({ message: "Create new Todo Successfuly", todo }).end();
+    return res.status(201).json({ message: "Create new Todo Successfuly", todo }).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
@@ -54,9 +54,25 @@ export const createNewTodo = async (req: Request, res: Response) => {
 export const deleteTodoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const todo = await getTodoByID(id);
+    if (todo) {
+      const delete_todo = await deleteTodo(id);
+      return res.status(200).json({ message: "Delete Todo Successfuly", delete_todo }).end();
+    }
+    return res.status(404).json({ message: "ID Not Found", id }).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
 
-    const deleteTodo = await deleteTodoByID(id);
-    return res.status(200).json({ message: "Delete Todo Successfuly", deleteTodo }).end();
+export const updateTodoById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const options = { new: true }; // ให้ส้งค่าที่ update ใหม่กลับบมา
+    const update_todo = await updateTodo(id, body, options);
+    return res.status(200).json({ message: "Update Todo Successfuly", data: update_todo }).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);

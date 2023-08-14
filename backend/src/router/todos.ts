@@ -4,6 +4,7 @@ import {
   searchTodosByStatus,
   createNewTodo,
   deleteTodoById,
+  updateTodoById,
 } from "../controllers/todos";
 
 // Create Router
@@ -12,4 +13,5 @@ export default (router: Router) => {
   router.get("/api/todos/search/:status", searchTodosByStatus);
   router.post("/api/todos/", createNewTodo);
   router.delete("/api/todos/:id", deleteTodoById);
+  router.patch("/api/todos/:id", updateTodoById);
 };

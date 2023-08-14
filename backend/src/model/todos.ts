@@ -11,6 +11,7 @@ export const TodoModel = mongoose.model("Todos", TodoSchema);
 
 // Actions
 export const getTodos = () => TodoModel.find();
+export const getTodoByID = (id: string) => TodoModel.findById({ _id: id });
 export const createTodo = (values: Record<string, any>) => {
   const newTodo = new TodoModel(values)
     .save()
@@ -18,6 +19,6 @@ export const createTodo = (values: Record<string, any>) => {
     .catch((error) => console.log(error));
   return newTodo;
 };
-export const deleteTodoByID = (id: string) => TodoModel.findByIdAndDelete({ _id: id });
-export const updateTodoByID = (id: string, values: Record<string, any>) =>
-  TodoModel.findByIdAndUpdate(id, values);
+export const deleteTodo = (id: string) => TodoModel.findByIdAndDelete({ _id: id });
+export const updateTodo = (id: string, values: Record<string, any>, options: Object) =>
+  TodoModel.findByIdAndUpdate(id, values, options);
