@@ -1,133 +1,161 @@
-import { useEffect, useRef, useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
+
+// Interface
+import { ITodo } from "./utils/todoInterface";
+
+// Components
 import TodoComponent from "./components/TodoComponent";
 import ButtonsComponent from "./components/ButtonsComponent";
+import FormInput from "./components/FormInput";
 
-export interface Todo {
-  id: number;
-  todo: string;
-  complete: boolean;
-}
-
-const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [complete, setComplete] = useState(false);
-  const [btnAll, setBtnAll] = useState(true);
+export default function App() {
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [searchTodo, setSearchTodo] = useState<string>("all");
 
   useEffect(() => {
-    inputRef.current?.focus();
-  });
+    getAllTodos();
+  }, []);
 
-  // Add New Todo
-  const handleAdd = (event: FormEvent) => {
-    event.preventDefault(); // เมื่อกด form submit จะไม่ทำการ refresh หน้า
-    if (inputRef.current?.value.length === 0) {
+  // Get All Todos
+  const getAllTodos = async () => {
+    await axios
+      .get("http://localhost:3000/api/todos")
+      .then((response) => {
+        if (response.status === 200) {
+          setTodos(response.data.todos);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  // Search Todo By Status
+  const handleSearchTodo = async (search: string) => {
+    await axios
+      .get(`http://localhost:3000/api/todos/search/${search}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTodos(response.data.todos);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  // Create New Todo
+  const createTodo = async (event: FormEvent) => {
+    event.preventDefault();
+    if (title.length === 0) {
+      toast.error("Please enter a title");
       return;
     }
-    setTodos((previousTodos) => [
-      ...previousTodos,
-      {
-        id: Date.now(),
-        todo: `${inputRef.current?.value}`,
-        complete: false,
-      },
-    ]);
-    setTodo("");
+    await axios
+      .post(`http://localhost:3000/api/todos`, { title: title })
+      .then((response) => {
+        getAllTodos();
+        setTitle("");
+        toast.success(response.data.message);
+      })
+      .catch((error) => console.log(error.message));
   };
 
-  // Toggle Complete
-  const toggleComplete = (id: number) => {
-    setTodos((previousTodos) =>
-      previousTodos.map((todo) => (todo.id === id ? { ...todo, complete: !todo.complete } : todo))
-    );
-  };
-
-  // Update Todo
-  const updateTodo = (id: number) => {
-    todos.map((todo) => {
-      if (todo.id === id) {
-        const newValue = prompt("Please edit your todo:", todo.todo);
-        if (newValue !== null && newValue !== undefined && newValue !== "") {
-          setTodos((previousTodos) =>
-            previousTodos.map((todo) => (todo.id === id ? { ...todo, todo: newValue } : todo))
-          );
-        } else {
-          return todo;
+  // Toggle Todo Complete By ID
+  const toggleComplete = async (id: string, complete: boolean) => {
+    await axios
+      .patch(`http://localhost:3000/api/todos/${id}`, { complete: !complete })
+      .then((response) => {
+        if (response.status === 200) {
+          getAllTodos();
         }
-        console.log("todo | complete: ", todo.todo, todo.complete);
-      }
+      })
+      .catch((error) => console.log(error.message));
+  };
+
+  // Update Todo By ID
+  const updateTodo = async (id: string, title: string) => {
+    Swal.fire({
+      title: "Submit your Github username",
+      input: "text",
+      inputValue: title,
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      showLoaderOnConfirm: true,
+      preConfirm: (updateTitle: string) => {
+        return axios
+          .patch(`http://localhost:3000/api/todos/${id}`, { title: updateTitle })
+          .then((response) => {
+            if (response.status === 200) {
+              getAllTodos();
+            }
+          })
+          .catch((error) => {
+            console.log(error.message);
+            Swal.showValidationMessage(`Request failed: ${error}`);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
     });
   };
 
-  // Delete Todo
-  const deleteTodo = (id: number) => {
-    setTodos((previousTodos) => previousTodos.filter((todo) => todo.id !== id));
+  // Delete Todo By ID
+  const deleteTodo = async (id: string) => {
+    await axios
+      .delete(`http://localhost:3000/api/todos/${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          getAllTodos();
+          toast.success(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
     <div className="w-screen h-screen flex items-center flex-col flex-wrap mt-10">
-      <h1 className="text-xl xl:text-[30px] font-bold mb-5 text-center">
-        Todo Lists With React + Typescript
-      </h1>
+      <Toaster />
+      <h1 className="text-xl xl:text-[30px] font-bold mb-5 text-center">Full-Stack TodoLists</h1>
       <div className="w-fit flex justify-center">
-        <form onSubmit={handleAdd}>
-          <input
-            type="text"
-            name=""
-            ref={inputRef}
-            onChange={(e) => setTodo(e.target.value)}
-            value={todo}
-            className="w-[200px] md:w-[300px] xl:w-[400px] border-2 border-solid border-black rounded-lg p-1 mr-1"
-          />
-          <button
-            type="submit"
-            id="btn-add-new"
-            className="border-2 border-solid border-black rounded-lg bg-black text-white px-5 py-1.5 mr-1"
-          >
-            Add New
-          </button>
-        </form>
+        <FormInput title={title} setTitle={setTitle} createTodo={createTodo} />
       </div>
       <div>
-        <ButtonsComponent setComplete={setComplete} setBtnAll={setBtnAll} />
+        <ButtonsComponent
+          handleSearchTodo={handleSearchTodo}
+          setSearchTodo={setSearchTodo}
+          getAllTodos={getAllTodos}
+        />
       </div>
       <div className="flex flex-wrap flex-col mt-3">
         <p className="font-bold text-center">
-          All Todos ({todos.length}) | {btnAll ? "#All" : complete ? "#Complete" : "#Not Complete"}
+          All Todos ({todos.length}) |
+          {searchTodo === "all"
+            ? "#All"
+            : searchTodo === "complete"
+            ? "#Complete"
+            : "#Not Complete"}
         </p>
-        {btnAll
-          ? todos.map((todo) => {
-              return (
-                <TodoComponent
-                  key={todo.id}
-                  id={todo.id}
-                  todo={todo.todo}
-                  complete={todo.complete}
-                  toggleComplete={toggleComplete}
-                  deleteTodo={deleteTodo}
-                  updateTodo={updateTodo}
-                />
-              );
-            })
-          : todos
-              .filter((todo) => todo.complete === complete)
-              .map((filteredTodo) => {
-                return (
-                  <TodoComponent
-                    key={filteredTodo.id}
-                    id={filteredTodo.id}
-                    todo={filteredTodo.todo}
-                    complete={filteredTodo.complete}
-                    toggleComplete={toggleComplete}
-                    deleteTodo={deleteTodo}
-                    updateTodo={updateTodo}
-                  />
-                );
-              })}
+        {todos.map((todo) => {
+          return (
+            <TodoComponent
+              key={todo._id}
+              {...todo}
+              deleteTodo={deleteTodo}
+              toggleComplete={toggleComplete}
+              updateTodo={updateTodo}
+            />
+          );
+        })}
       </div>
     </div>
   );
-};
-
-export default App;
+}
