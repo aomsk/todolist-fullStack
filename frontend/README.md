@@ -14,6 +14,8 @@
 - React (Vite)
 - Tailwind CSS
 - FontAwesome (Icon)
+- React-hot-toast
+- Sweetalert2
 
 ### **How to run😊**
 
