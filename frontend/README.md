@@ -1,6 +1,6 @@
 # **Todo Lists With React + Typescript📝**
 
-### Features
+### Features 😍
 
 - Create new todo ✅
 - Search todo by status ✅
@@ -15,7 +15,7 @@
 - Tailwind CSS
 - FontAwesome (Icon)
 
-### **How to run😍**
+### **How to run😊**
 
 ```
 cd frontend
