@@ -32,3 +32,19 @@ TodoList FullStack (MERN Stack => MongoDB, Express, React, Nodejs)
 * Express
 * MongoDB
 * TypeScript
+
+### **How to run😊**
+
+#### Frontend
+```
+cd frontend
+npm install
+npm run dev
+```
+
+#### Backend
+```
+cd backend
+npm install
+npm run start
+```
