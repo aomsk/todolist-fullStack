@@ -6,6 +6,7 @@
 - Search todo by status (complete, notcomplete)
 - Create new todo to DB
 - Delete todo by ID
+- Update todo by ID
 
 ## Step to run
 
@@ -13,7 +14,8 @@
 cd backend
 npm install
 npm run start
-Go to http://localhost:3000/
+Go to http://localhost:3000/api/todos
+Docs: http://localhost:3000/docs
 ```
 
 ## Install Dependencies
