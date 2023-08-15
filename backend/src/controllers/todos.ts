@@ -18,13 +18,13 @@ export const searchTodosByStatus = async (req: Request, res: Response) => {
       const todoComplete = todos.filter((todo) => todo.complete === true);
       return res
         .status(200)
-        .json({ message: "GET todo by status complete", status: "complete", todoComplete });
+        .json({ message: "GET todo by status complete", search: "complete", todos: todoComplete });
     } else if (status === "notcomplete") {
       const todoNotComplete = todos.filter((todo) => todo.complete === false);
       return res.status(200).json({
         message: "GET todo by status not-complete",
-        status: "notcomplete",
-        todoNotComplete,
+        search: "notcomplete",
+        todos: todoNotComplete,
       });
     } else {
       return res.status(404).json({ message: "Not found status" });
