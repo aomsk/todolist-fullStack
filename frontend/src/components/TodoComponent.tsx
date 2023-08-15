@@ -18,8 +18,8 @@ function TodoComponent({
 }: TodoProps) {
   return (
     <div className={complete ? "text-gray-400 rounded-lg line-through font-normal" : ""}>
-      <div className="w-[300px] md:w-[450px] h-auto xl:w-[550px] flex justify-between items-center rounded-lg bg-gray-100 p-3 py-5 mt-3 mb-3 ">
-        <p className="font-bold cursor-pointer" onClick={() => toggleComplete(_id, complete)}>
+      <div className="w-auto md:w-[500px] h-auto xl:w-[600px] flex justify-between items-center rounded-lg bg-gray-100 px-3 py-5 mt-3 mb-3 ">
+        <p className="font-bold cursor-pointer mr-5" onClick={() => toggleComplete(_id, complete)}>
           {title}
         </p>
         <div>

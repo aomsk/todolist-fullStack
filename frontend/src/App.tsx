@@ -122,7 +122,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center flex-col flex-wrap mt-10">
+    <div className="w-full h-full flex items-center flex-col flex-wrap mt-10">
       <Toaster />
       <h1 className="text-xl xl:text-[30px] font-bold mb-5 text-center">Full-Stack TodoLists</h1>
       <div className="w-fit flex justify-center">
